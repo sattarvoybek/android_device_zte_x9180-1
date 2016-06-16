@@ -1,6 +1,6 @@
 Copyright 2016 - The CyanogenMod Project
 
-Device configuration for Nubia Z7 Mini.
+Device configuration for Nubia Z5s Mini.
 =====================================
 
 Basic   | Spec Sheet
