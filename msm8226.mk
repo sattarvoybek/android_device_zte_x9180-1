@@ -16,7 +16,7 @@
 
 $(call inherit-product, $(SRC_TARGET_DIR)/product/languages_full.mk)
 
-$(call inherit-product-if-exists, vendor/zte/x9180/x9180-vendor.mk)
+$(call inherit-product-if-exists, vendor/nubia/nx404h/nx404h-vendor.mk)
 
 # Overlay
 DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay
@@ -30,6 +30,7 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.camera.flash-autofocus.xml:system/etc/permissions/android.hardware.camera.flash-autofocus.xml \
     frameworks/native/data/etc/android.hardware.camera.front.xml:system/etc/permissions/android.hardware.camera.front.xml \
     frameworks/native/data/etc/android.hardware.location.gps.xml:system/etc/permissions/android.hardware.location.gps.xml \
+    frameworks/native/data/etc/android.software.midi.xml:system/etc/permissions/android.software.midi.xml \
     frameworks/native/data/etc/android.hardware.sensor.accelerometer.xml:system/etc/permissions/android.hardware.sensor.accelerometer.xml \
     frameworks/native/data/etc/android.hardware.sensor.gyroscope.xml:system/etc/permissions/android.hardware.sensor.gyroscope.xml \
     frameworks/native/data/etc/android.hardware.sensor.light.xml:system/etc/permissions/android.hardware.sensor.light.xml \
@@ -49,7 +50,7 @@ PRODUCT_COPY_FILES += \
     external/ant-wireless/antradio-library/com.dsi.ant.antradio_library.xml:system/etc/permissions/com.dsi.ant.antradio_library.xml
 
 # System Properties
--include $(LOCAL_PATH)/system_prop.mk
+#include $(LOCAL_PATH)/system_prop.mk
 
 # Screen density
 PRODUCT_AAPT_CONFIG := normal
@@ -63,7 +64,7 @@ TARGET_SCREEN_WIDTH := 720
 $(call inherit-product, frameworks/native/build/phone-xhdpi-2048-dalvik-heap.mk)
 
 # call hwui memory config
-# $(call inherit-product-if-exists, frameworks/native/build/phone-xxhdpi-2048-hwui-memory.mk)
+$(call inherit-product-if-exists, frameworks/native/build/phone-xxhdpi-2048-hwui-memory.mk)
 
 # Audio
 PRODUCT_PACKAGES += \
@@ -79,14 +80,15 @@ PRODUCT_PACKAGES += \
     libqcompostprocbundle \
     libqcomvisualizer \
     libqcomvoiceprocessing \
-    tinymix
+    libqcomvoiceprocessingdescriptors
+    #tinymix
 
 # Audio configuration
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/etc/audio_effects.conf:system/vendor/etc/audio_effects.conf \
-    $(LOCAL_PATH)/etc/audio_platform_info.xml:system/etc/audio_platform_info.xml \
-    $(LOCAL_PATH)/etc/audio_policy.conf:system/etc/audio_policy.conf \
-    $(LOCAL_PATH)/etc/mixer_paths.xml:system/etc/mixer_paths.xml
+    $(LOCAL_PATH)/audio/audio_effects.conf:system/vendor/etc/audio_effects.conf \
+    $(LOCAL_PATH)/audio/audio_platform_info.xml:system/etc/audio_platform_info.xml \
+    $(LOCAL_PATH)/audio/audio_policy.conf:system/etc/audio_policy.conf \
+    $(LOCAL_PATH)/audio/mixer_paths.xml:system/etc/mixer_paths.xml
 
 # Camera
 PRODUCT_PACKAGES += \
@@ -96,8 +98,7 @@ PRODUCT_PACKAGES += \
 
 # Connectivity Engine support
 PRODUCT_PACKAGES += \
-    libcnefeatureconfig \
-    services-ext
+    libcnefeatureconfig
 
 # Charger
 PRODUCT_PACKAGES += \
@@ -148,18 +149,11 @@ PRODUCT_PACKAGES += \
 
 # FM
 PRODUCT_PACKAGES += \
-    FM2 \
-    FMRecord \
-    libqcomfm_jni \
-    qcom.fmradio \
-    qcom.fmradio.xml
+    FMRadio \
+    libfmjni
 
-# GPS
-PRODUCT_PACKAGES += \
-    libgps.utils \
-    gps.msm8226 \
-    libloc_core \
-    libloc_eng
+# Dot View Case
+PRODUCT_PACKAGES += Dotcase
 
 # LOWI
 PRODUCT_COPY_FILES += \
@@ -169,6 +163,13 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/etc/sec_config:system/etc/sec_config
 
+# BoringSSL compatability wrapper
+PRODUCT_PACKAGES += \
+    libboringssl-compat
+
+# Stlport
+PRODUCT_PACKAGES += \
+    libstlport
 # Keystore
 PRODUCT_PACKAGES += \
     keystore.msm8226
@@ -189,70 +190,61 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/etc/init.d/01frandom:system/etc/init.d/01frandom
 
-# palm2sleep
-PRODUCT_PACKAGES += \
-    com.cyanogenmod.keyhandler
 
 # OMX
 PRODUCT_PACKAGES += \
     libc2dcolorconvert \
     libdashplayer \
     libdivxdrmdecrypt \
+    libextmedia_jni \
     libOmxAacEnc \
     libOmxAmrEnc \
     libOmxCore \
-    libOmxMux \
     libOmxEvrcEnc \
     libOmxQcelp13Enc \
     libOmxVdec \
-    libOmxVdecHevc \
     libOmxVenc \
-    libHevcSwDecoder \
+    libOmxVidcCommon \
+    libqcmediaplayer \
     libstagefrighthw \
+    libstagefright_soft_flacdec \
     qcmediaplayer
+#    libOmxMux \
+#    libOmxVdecHevc \
 
 PRODUCT_BOOT_JARS += \
     qcmediaplayer
-
-PRODUCT_BOOT_JARS += \
-    qcom.fmradio
-
-PRODUCT_PACKAGES += \
-    com.android.vcard
-
 # Power
 PRODUCT_PACKAGES += \
     power.msm8226
+    
+#enable/disable softkey script
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/etc/set_softkey.sh:system/bin/set_softkey.sh
 
 # Ramdisk
 PRODUCT_PACKAGES += \
     init.rc \
-    fstab.x9180 \
-    fstab.sd \
-    fstab.int \
-    fstab.zram_64 \
-    fstab.zram_128 \
-    fstab.zram_256 \
-    fstab.zram_512 \
+    fstab.qcom \
     init.class_main.sh \
     init.mdm.sh \
     init.nubia.sh \
     init.nubia.usb.rc \
-    init.qcom.class_core.sh \
     init.qcom.early_boot.sh \
     init.qcom.factory.sh \
     init.qcom.rc \
-    init.qcom.sdcard.rc \
     init.recovery.qcom.rc \
     init.qcom.sh \
     init.qcom.ssr.sh \
-    init.qcom.syspart_fixup.sh \
     init.qcom.usb.sh \
     init.target.rc \
     init.trace.rc \
-    init.usb.rc \
     ueventd.qcom.rc \
     ueventd.rc
+
+# Old RIL symbols
+PRODUCT_PACKAGES += \
+    libnubia
 
 # USB
 PRODUCT_PACKAGES += \
@@ -323,6 +315,7 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/etc/hsic.control.bt.sh:system/etc/hsic.control.bt.sh \
     $(LOCAL_PATH)/etc/init.ath3k.bt.sh:system/etc/init.ath3k.bt.sh \
     $(LOCAL_PATH)/etc/init.crda.sh:system/etc/init.crda.sh \
+    $(LOCAL_PATH)/etc/init.qcom.uicc.sh:system/etc/init.qcom.uicc.sh \
     $(LOCAL_PATH)/etc/init.qcom.audio.sh:system/etc/init.qcom.audio.sh \
     $(LOCAL_PATH)/etc/init.qcom.bt.sh:system/etc/init.qcom.bt.sh \
     $(LOCAL_PATH)/etc/init.qcom.coex.sh:system/etc/init.qcom.coex.sh \
@@ -343,6 +336,8 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/etc/hostapd/hostapd_default.conf:system/etc/hostapd/hostapd_default.conf
 
 PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/usr/idc/cyttsp4_mt.idc:system/usr/idc/cyttsp4_mt.idc \
+    $(LOCAL_PATH)/usr/keylayout/synaptics_rmi4_i2c.kl:system/usr/keylayout/synaptics_rmi4_i2c.kl \
     $(LOCAL_PATH)/usr/keylayout/gpio-keys.kl:system/usr/keylayout/gpio-keys.kl \
     $(LOCAL_PATH)/usr/keylayout/Generic.kl:system/usr/keylayout/Generic.kl
 

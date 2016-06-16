@@ -3,6 +3,7 @@ LOCAL_PATH:= $(call my-dir)
 #----------------------------------------------------------------------
 # Copy additional target-specific files
 #----------------------------------------------------------------------
+ifeq ($(strip $(BOARD_HAS_QCOM_WLAN)),true)
 
 include $(CLEAR_VARS)
 LOCAL_MODULE       := hostapd.accept
