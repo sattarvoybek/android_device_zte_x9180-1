@@ -100,30 +100,25 @@ fi
 # Allow USB enumeration with default PID/VID
 #
 baseband=`getprop ro.baseband`
-echo 1 > /sys/class/android_usb/f_mass_storage/lun/nofua
-echo 1 > /sys/class/android_usb/f_mass_storage/lun1/nofua
+echo 1  > /sys/class/android_usb/f_mass_storage/lun/nofua
 usb_config=`getprop persist.sys.usb.config`
-build_type=`getprop ro.build.type`
-
-#case "$usb_config" in
-#    "" | "adb" | "none") #USB persist config not set, select default configuration
-#      case "$build_type" in
-#          "eng" | "userdebug")
-#             setprop persist.sys.usb.config nubia,adb
-#           ;;
-#          *) 	
-#            setprop persist.sys.usb.config nubia
-#           ;;
-#      esac
-#     ;;
-#	  * ) ;; #USB persist config exists, do nothing
-#esac	 		
+case "$usb_config" in
+    "" | "adb") #USB persist config not set, select default configuration
+        setprop persist.sys.usb.config nubia,adb
+    ;;
+    "none") #default configuration for product release
+        setprop persist.sys.usb.config nubia
+	;;
+    * ) ;; #USB persist config exists, do nothing
+esac
 
 #
 # Add support for exposing lun0 as cdrom in mass-storage
 #
 target=`getprop ro.product.device`
-#cdromname="/system/driver.iso"
+#cdromname="/system/etc/cdrom_install.iso"
+
+#echo "mounting usbcdrom lun"
 #echo $cdromname > /sys/class/android_usb/android0/f_mass_storage/lun0/file
 
 #cdromenable=`getprop persist.service.cdrom.enable`

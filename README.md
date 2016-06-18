@@ -7,7 +7,7 @@ Basic   | Spec Sheet
 -------:|:-------------------------
 CPU     | Quad-core 1.2 GHz Cortex-A7
 CHIPSET | Qualcomm MSM8926 Snapdragon 400
-GPU     | Adreno 330
+GPU     | Adreno 305
 SIM     | Micro-SIM
 Memory  | 2GB RAM
 Shipped Android Version | 4.3 (Jelly Bean)

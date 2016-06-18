@@ -14,4 +14,5 @@
 # limitations under the License.
 
 PRODUCT_MAKEFILES := \
-    $(LOCAL_DIR)/full_nx404h.mk \
+    $(LOCAL_DIR)/full_NX404H.mk \
+    $(LOCAL_DIR)/omni_NX404H.mk
